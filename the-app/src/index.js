@@ -62,7 +62,6 @@ function Yhteensa(props) {
   )
 }
 
-
 ReactDOM.render(
   <App />,
   document.getElementById('root')
