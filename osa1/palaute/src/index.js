@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import './index.css';
 
 class App extends React.Component {
     constructor() {
@@ -13,15 +14,15 @@ class App extends React.Component {
     }
     annaPalaute = (tyyppi) => {
         return () => {
-            if (tyyppi == "hyva") {
+            if (tyyppi === "hyva") {
                 this.setState((prevState) => ({
                     hyva: prevState.hyva + 1
                 }));
-            } else if (tyyppi == "neutraali") {
+            } else if (tyyppi === "neutraali") {
                 this.setState((prevState) => ({
                     neutraali: prevState.neutraali + 1
                 }));
-            } else if (tyyppi == "huono") {
+            } else if (tyyppi === "huono") {
                 this.setState((prevState) => ({
                     huono: prevState.huono + 1
                 }));
@@ -84,7 +85,16 @@ const Statistics = ({ hyva, neutraali, huono }) => {
 }
 const Statistic = ({ otsikko, arvo }) => {
     return (
-        <div>{otsikko} {arvo}</div>
+        <div>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>{otsikko}</td>
+                        <td>{arvo}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     )
 }
 const Otsikko = (props) => {
