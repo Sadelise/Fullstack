@@ -11,22 +11,23 @@ class App extends React.Component {
             neutraali: 0
         }
     }
-    hyva = () => {
-        this.setState((prevState) => ({
-            hyva: prevState.hyva + 1
-        }));
+    annaPalaute = (tyyppi) => {
+        return () => {
+            if (tyyppi == "hyva") {
+                this.setState((prevState) => ({
+                    hyva: prevState.hyva + 1
+                }));
+            } else if (tyyppi == "neutraali") {
+                this.setState((prevState) => ({
+                    neutraali: prevState.neutraali + 1
+                }));
+            } else if (tyyppi == "huono") {
+                this.setState((prevState) => ({
+                    huono: prevState.huono + 1
+                }));
+            }
+        }
     }
-    huono = () => {
-        this.setState((prevState) => ({
-            huono: prevState.huono + 1
-        }));
-    }
-    neutraali = () => {
-        this.setState((prevState) => ({
-            neutraali: prevState.neutraali + 1
-        }));
-    }
-
     render() {
         let statistics;
         if (this.state.hyva > 0 ||
@@ -43,21 +44,22 @@ class App extends React.Component {
         return (
             <div>
                 <Otsikko otsikko={"anna palautetta"} />
-                <Button tila={this.hyva}
-                    otsikko={"hyva"} />
-                <Button tila={this.neutraali}
-                    otsikko={"neutraali"} />
-                <Button tila={this.huono}
-                    otsikko={"huono"} />
-                <p>{statistics}</p>
+                <Button annaPalaute={this.annaPalaute}
+                    tyyppi={"hyva"} />
+                <Button annaPalaute={this.annaPalaute}
+                    tyyppi={"neutraali"} />
+                <Button annaPalaute={this.annaPalaute}
+                    tyyppi={"huono"} />
+                <div>{statistics}</div>
             </div>
         )
     }
 }
-const Button = ({ tila, otsikko }) => {
+
+const Button = ({ annaPalaute, tila, tyyppi }) => {
     return (
-        <button onClick={tila}>
-            {otsikko}
+        <button onClick={annaPalaute(tyyppi)}>
+            {tyyppi}
         </button>
     )
 }
@@ -93,7 +95,6 @@ const Otsikko = (props) => {
     )
 }
 function Keskiarvo(hyva, neutraali, huono) {
-    console.log("keskiarvossa " + hyva)
     return ((hyva - huono) / (hyva + neutraali + huono))
 }
 function Positiivisia(hyva, neutraali, huono) {

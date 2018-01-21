@@ -30,7 +30,7 @@ const App = () => {
   )
 }
 
-function Otsikko(props) {
+const Otsikko = (props) => {
   return (
     <div>
       <h1>{props.kurssi}</h1>
@@ -48,7 +48,7 @@ const Sisalto = (props) => {
   )
 }
 
-function Osa(props) {
+const Osa = (props) => {
   return (
     <div>
       <p>{props.osa["nimi"]} {props.osa["tehtavia"]}</p>
@@ -56,7 +56,7 @@ function Osa(props) {
   )
 }
 
-function Yhteensa(props) {
+const Yhteensa = (props) => {
   return (
     <p>yhteensä {props.osat[0].tehtavia + props.osat[1].tehtavia + props.osat[2].tehtavia} tehtävää</p>
   )
