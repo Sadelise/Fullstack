@@ -36,13 +36,11 @@ class App extends React.Component {
     }
 
     vote = () => {
-        let changedAnecdotes = this.state.anecdotes
-        const votes = this.state.anecdotes[this.state.selected]["votes"]
-        changedAnecdotes[this.state.selected].votes = votes + 1
-
-        console.log(votes)
-
         return () => {
+            let changedAnecdotes = this.state.anecdotes
+            const votes = this.state.anecdotes[this.state.selected]["votes"]
+            changedAnecdotes[this.state.selected].votes = votes + 1
+
             this.setState({
                 anecdotes: changedAnecdotes
             })
@@ -50,22 +48,36 @@ class App extends React.Component {
     }
 
     next = () => {
-        const next = Math.floor(Math.random() * 6);
         return () => {
+            const next = Math.floor(Math.random() * 6);
             this.setState(() => ({
                 selected: next
             }));
         }
     }
 
+    haeSuosituin = () => {
+        let mostVoted = this.state.anecdotes[0];
+        for (var i = 1; i < this.state.anecdotes.length; i++) {
+            if (mostVoted.votes < this.state.anecdotes[i].votes)
+                mostVoted = this.state.anecdotes[i];
+        }
+        return mostVoted;
+    }
+
     render() {
+        let popular = this.haeSuosituin();
         return (
             <div>
                 <p>{this.state.anecdotes[this.state.selected]["text"]}</p>
-                <Button toiminto={this.next()}
-                    otsikko="next anecdote" />
+                <p>has {this.state.anecdotes[this.state.selected]["votes"]} votes</p>
                 <Button toiminto={this.vote()}
                     otsikko="vote" />
+                <Button toiminto={this.next()}
+                    otsikko="next anecdote" />
+                <Suosituin otsikko="anecdote with most votes:"
+                    anecdote={popular.text}
+                    votes={popular.votes} />
             </div>
         )
     }
@@ -76,6 +88,17 @@ const Button = ({ toiminto, otsikko }) => {
         <button onClick={toiminto}>
             {otsikko}
         </button>
+    )
+}
+
+
+const Suosituin = ({ otsikko, anecdote, votes }) => {
+    return (
+        <div>
+            <h2>{otsikko}</h2>
+            <p>{anecdote}</p>
+            <p>has {votes} votes</p>
+        </div>
     )
 }
 
