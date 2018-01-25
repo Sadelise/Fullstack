@@ -1,33 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
-const Kurssit = ({ kurssit }) =>
-    <div>
-        {kurssit.map(kurssi => <Kurssi key={kurssi.id} kurssi={kurssi} />)}
-    </div>
-
-const Kurssi = ({ kurssi }) =>
-    <div>
-        <Otsikko kurssi={kurssi} />
-        <Sisalto kurssi={kurssi} />
-        <Yhteensa kurssi={kurssi} />
-    </div>
-
-const Osa = ({ osa }) => <p>{osa.nimi} {osa.tehtavia}</p>
-const Otsikko = ({ kurssi }) => <h1>{kurssi.nimi}</h1>
-const Sisalto = ({ kurssi }) => {
-    return (
-        <div>
-            {kurssi.osat.map(osa => <Osa key={osa.id} osa={osa} />)}
-        </div>
-    )
-}
-const Yhteensa = ({ kurssi }) => {
-    var total = kurssi.osat.reduce(function (sum, osa) {
-        return sum + osa.tehtavia
-    }, 0)
-    return "yhteensä " + total + " tehtävää";
-}
+import Kurssi from './kurssi'
 
 const App = () => {
     const kurssit = [
@@ -73,7 +46,7 @@ const App = () => {
     return (
         <div>
             <h1>Opetusohjelma</h1>
-            <Kurssit kurssit={kurssit} />
+            {kurssit.map(kurssi => <Kurssi key={kurssi.id} kurssi={kurssi} />)}
         </div>
     )
 }
