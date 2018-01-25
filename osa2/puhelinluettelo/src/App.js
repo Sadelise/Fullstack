@@ -50,13 +50,15 @@ class App extends React.Component {
     if (found) {
       alert("Henkilö on jo olemassa!")
     } else {
-      const persons = this.state.persons.concat(personObject)
-
-      this.setState({
-        persons,
-        newName: '',
-        newNumber: ''
-      })
+      axios.post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          console.log(response)
+          this.setState({
+            persons: this.state.persons.concat(response.data),
+            newName: '',
+            newNumber: ''
+          })
+        })
     }
   }
 
