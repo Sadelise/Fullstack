@@ -23,11 +23,20 @@ class App extends React.Component {
     this.setState({ filterBy: event.target.value })
   }
 
+  filterByName = (name) => {
+    if (name !== undefined) {
+      this.setState({ filterBy: name })
+    }
+  }
+
   render() {
     const countriesToShow =
       this.state.filterBy === '' ?
         this.state.countries :
         this.state.countries.filter(country => country.name.toLowerCase().indexOf(this.state.filterBy.toLowerCase()) > -1)
+
+
+
     return (
       <div>
         <h1>Puhelinluettelo</h1>
@@ -36,12 +45,12 @@ class App extends React.Component {
             <input value={this.state.filterBy}
             onChange={this.handleFilterBy} />
         </div>
-        <Countries countries={countriesToShow} />
+        <Countries countries={countriesToShow} filterByName={this.filterByName} />
       </div>
     )
   }
 }
-const Countries = ({ countries }) => {
+const Countries = ({ countries, filterByName }) => {
   if (countries.length === 1) {
     return (
       <Country country={countries[0]} />
@@ -49,7 +58,7 @@ const Countries = ({ countries }) => {
   } else if (countries.length <= 10) {
     return (
       <div>
-        {countries.map(country => <CountryList key={country.name} country={country} />)}
+        {countries.map(country => <CountryList key={country.name} country={country} filterByName={filterByName} />)}
       </div>
     )
   } else {
@@ -67,19 +76,27 @@ const Country = ({ country }) => {
   )
 }
 
-const CountryList = ({ country }) => {
+const CountryList = ({ country, filterByName }) => {
   return (
     <div>
       <table>
         <tbody>
           <tr>
-            <td>{country.name}</td>
+            <td >
+              <div onClick={() => filterByName(country.name)}>
+                {country.name}
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
-    </div>
+    </div >
   )
 }
 
 
 export default App
+
+
+
+
