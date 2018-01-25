@@ -1,22 +1,24 @@
 import React from 'react';
+import "./App.css"
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       persons: [
-        { name: 'Arto Hellas' }
+        {
+          name: 'Arto Hellas',
+          number: '1234567891'
+        }
       ],
-      newName: ''
+      newName: '',
+      newNumber: ''
     }
   }
-
-  addPerson = (event) => {
-    event.preventDefault()
-    console.log('nappia painettu')
-    console.log(event.target)
+  handleNewNumber = (event) => {
+    console.log(event.target.value)
+    this.setState({ newNumber: event.target.value })
   }
-
   handleNewPerson = (event) => {
     console.log(event.target.value)
     this.setState({ newName: event.target.value })
@@ -24,7 +26,8 @@ class App extends React.Component {
   addPerson = (event) => {
     event.preventDefault()
     const personObject = {
-      name: this.state.newName
+      name: this.state.newName,
+      number: this.state.newNumber
     }
 
     var avoid = this.state.newName
@@ -38,7 +41,8 @@ class App extends React.Component {
 
       this.setState({
         persons,
-        newName: ''
+        newName: '',
+        newNumber: ''
       })
     }
   }
@@ -54,6 +58,12 @@ class App extends React.Component {
             />
           </div>
           <div>
+            numero: <input
+              value={this.state.newNumber}
+              onChange={this.handleNewNumber}
+            />
+          </div>
+          <div>
             <button type="submit">lisää</button>
           </div>
         </form>
@@ -66,7 +76,14 @@ class App extends React.Component {
 const Person = ({ person }) => {
   return (
     <div>
-      <p>{person.name}</p>
+      <table>
+        <tbody>
+          <tr>
+            <td>{person.name}</td>
+            <td>{person.number}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   )
 }
