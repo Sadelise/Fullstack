@@ -60,6 +60,15 @@ class App extends React.Component {
         })
     }
   }
+  deletePerson = (person) => {
+    if (window.confirm('Poistetaanko ' + person.name + '?')) {
+      personService.deletePerson(person.id)
+        .then(response => {
+          console.log(response)
+          this.componentWillMount()
+        })
+    }
+  }
 
   render() {
     const personsToShow =
@@ -78,7 +87,7 @@ class App extends React.Component {
           newNumber={this.state.newNumber}
           handleNewNumber={this.handleNewNumber}
         />
-        <Persons persons={personsToShow} />
+        <Persons persons={personsToShow} deletePerson={this.deletePerson} />
       </div>
     )
   }
