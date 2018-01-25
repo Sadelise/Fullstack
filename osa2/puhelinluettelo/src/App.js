@@ -3,22 +3,27 @@ import "./App.css"
 import Persons from "./Persons"
 import AddForm from "./AddForm"
 import Filter from "./Filter"
+import axios from 'axios'
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons: [
-        { name: 'Arto Hellas', number: '040-123456' },
-        { name: 'Martti Tienari', number: '040-123456' },
-        { name: 'Arto Järvinen', number: '040-123456' },
-        { name: 'Lea Kutvonen', number: '040-123456' }
-      ],
+      persons: [],
       newName: '',
       newNumber: '',
       filterBy: ''
     }
   }
+
+  componentWillMount() {
+    console.log("mounting")
+    axios.get('http://localhost:3001/persons')
+      .then(response => {
+        this.setState({ persons: response.data })
+      })
+  }
+
   handleFilterBy = (event) => {
     console.log(event.target.value)
     this.setState({ filterBy: event.target.value })
