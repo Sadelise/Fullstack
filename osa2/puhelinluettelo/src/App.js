@@ -1,5 +1,8 @@
 import React from 'react';
 import "./App.css"
+import Persons from "./Persons"
+import AddForm from "./AddForm"
+import Filter from "./Filter"
 
 class App extends React.Component {
   constructor(props) {
@@ -17,7 +20,7 @@ class App extends React.Component {
     }
   }
   handleFilterBy = (event) => {
-    // console.log(event.target.value)
+    console.log(event.target.value)
     this.setState({ filterBy: event.target.value })
   }
   handleNewNumber = (event) => {
@@ -60,48 +63,20 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
-        <div>
-          rajaa näytettäviä
-       <input value={this.state.filterBy}
-            onChange={this.handleFilterBy} />
-        </div>
-        <h2>Lisää uusi</h2>
-        <form onSubmit={this.addPerson}>
-          <div>
-            nimi: <input
-              value={this.state.newname}
-              onChange={this.handleNewPerson}
-            />
-          </div>
-          <div>
-            numero: <input
-              value={this.state.newNumber}
-              onChange={this.handleNewNumber}
-            />
-          </div>
-          <div>
-            <button type="submit">lisää</button>
-          </div>
-        </form>
-        <h2>Numerot</h2>
-        {personsToShow.map(person => <Person key={person.name} person={person} />)}
+        <Filter filterBy={this.state.filterBy}
+          handleFilterBy={this.handleFilterBy}
+        />
+        <AddForm addPerson={this.addPerson}
+          newName={this.state.newName}
+          handleNewPerson={this.handleNewPerson}
+          newNumber={this.state.newNumber}
+          handleNewNumber={this.handleNewNumber}
+        />
+        <Persons persons={personsToShow} />
       </div>
     )
   }
 }
-const Person = ({ person }) => {
-  return (
-    <div>
-      <table>
-        <tbody>
-          <tr>
-            <td>{person.name}</td>
-            <td>{person.number}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  )
-}
+
 
 export default App
