@@ -27,12 +27,20 @@ class App extends React.Component {
       name: this.state.newName
     }
 
-    const persons = this.state.persons.concat(personObject)
+    var avoid = this.state.newName
+    var found = this.state.persons.find(function (person) {
+      return person.name === avoid;
+    });
+    if (found) {
+      alert("Henkilö on jo olemassa!")
+    } else {
+      const persons = this.state.persons.concat(personObject)
 
-    this.setState({
-      persons,
-      newName: ''
-    })
+      this.setState({
+        persons,
+        newName: ''
+      })
+    }
   }
   render() {
     return (
