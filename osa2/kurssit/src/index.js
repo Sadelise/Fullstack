@@ -5,21 +5,23 @@ const Kurssi = ({ kurssi }) =>
     <div>
         <Otsikko kurssi={kurssi} />
         <Sisalto kurssi={kurssi} />
+        <Yhteensa kurssi={kurssi} />
     </div>
+
 const Osa = ({ osa }) => <p>{osa.nimi} {osa.tehtavia}</p>
-const Otsikko = (props) => <h1>{props.kurssi.nimi}</h1>
-const Sisalto = (props) => {
+const Otsikko = ({ kurssi }) => <h1>{kurssi.nimi}</h1>
+const Sisalto = ({ kurssi }) => {
     return (
         <div>
-            {props.kurssi.osat.map(osa => <Osa key={osa.id} osa={osa} />)}
+            {kurssi.osat.map(osa => <Osa key={osa.id} osa={osa} />)}
         </div>
     )
 }
-const Yhteensa = (props) => {
-    const [osa1, osa2, osa3] = props.kurssi.osat
-    return (
-        <p>yhteensä {osa1.tehtavia + osa2.tehtavia + osa3.tehtavia} tehtävää</p>
-    )
+const Yhteensa = ({ kurssi }) => {
+    var total = kurssi.osat.reduce(function (sum, osa) {
+        return sum + osa.tehtavia
+    }, 0)
+    return "yhteensä " + total + " tehtävää";
 }
 
 const App = () => {
@@ -40,6 +42,11 @@ const App = () => {
                 nimi: 'Komponenttien tila',
                 tehtavia: 14,
                 id: 3
+            },
+            {
+                nimi: 'Redux',
+                tehtavia: 7,
+                id: 4
             }
         ]
     }
