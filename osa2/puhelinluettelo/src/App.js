@@ -18,7 +18,6 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    console.log("mounting")
     personService
       .getAll().then(persons => {
         this.setState({ persons })
@@ -26,15 +25,12 @@ class App extends React.Component {
   }
 
   handleFilterBy = (event) => {
-    console.log(event.target.value)
     this.setState({ filterBy: event.target.value })
   }
   handleNewNumber = (event) => {
-    console.log(event.target.value)
     this.setState({ newNumber: event.target.value })
   }
   handleNewPerson = (event) => {
-    console.log(event.target.value)
     this.setState({ newName: event.target.value })
   }
   addPerson = (event) => {
@@ -70,8 +66,12 @@ class App extends React.Component {
           newName: '',
           newNumber: ''
         })
-        this.setMessage("päivitettiin " + newPerson.name)
       })
+      .catch(error => {
+        this.componentWillMount()
+        this.saveNewPerson(personObject)
+      })
+    this.setMessage("päivitettiin " + personObject.name)
   }
 
   saveNewPerson = (personObject) => {
@@ -90,6 +90,7 @@ class App extends React.Component {
       personService.deletePerson(person.id)
         .then(response => {
           this.setMessage("poistettiin " + person.name)
+          this.componentWillMount()
         })
     }
   }

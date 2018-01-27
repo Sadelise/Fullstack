@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Persons = ({ persons, deletePerson }) => {
-    console.log(persons)
     return (
         <div>
             <h2>Numerot</h2>
