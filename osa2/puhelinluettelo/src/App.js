@@ -12,7 +12,8 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filterBy: ''
+      filterBy: '',
+      success: null
     }
   }
 
@@ -69,6 +70,7 @@ class App extends React.Component {
           newName: '',
           newNumber: ''
         })
+        this.setMessage("päivitettiin " + newPerson.name)
       })
   }
 
@@ -80,18 +82,23 @@ class App extends React.Component {
           newName: '',
           newNumber: ''
         })
+        this.setMessage("lisättiin " + newPerson.name)
       })
   }
   deletePerson = (person) => {
     if (window.confirm('Poistetaanko ' + person.name + '?')) {
       personService.deletePerson(person.id)
         .then(response => {
-          console.log(response)
-          this.componentWillMount()
+          this.setMessage("poistettiin " + person.name)
         })
     }
   }
-
+  setMessage = (message) => {
+    this.setState({ success: message })
+    setTimeout(() => {
+      this.setState({ success: null })
+    }, 5000)
+  }
   render() {
     const personsToShow =
       this.state.filterBy === '' ?
@@ -100,6 +107,7 @@ class App extends React.Component {
     return (
       <div>
         <h1>Puhelinluettelo</h1>
+        <Notification message={this.state.success} />
         <Filter filterBy={this.state.filterBy}
           handleFilterBy={this.handleFilterBy}
         />
@@ -115,5 +123,14 @@ class App extends React.Component {
   }
 }
 
-
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+  return (
+    <div className="error">
+      {message}
+    </div>
+  )
+}
 export default App

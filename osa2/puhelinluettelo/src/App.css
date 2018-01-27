@@ -2,3 +2,11 @@ table{
   table-layout: fixed;
   width: 80%;
 }
+
+.error {
+  color: black;
+  background: rgb(51, 187, 10);
+  border-style: solid;
+  padding: 10px;
+  margin-bottom: 10px;
+}
