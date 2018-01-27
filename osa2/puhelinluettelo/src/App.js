@@ -47,18 +47,40 @@ class App extends React.Component {
     var found = this.state.persons.find(function (person) {
       return person.name === avoid;
     });
+
     if (found) {
-      alert("Henkilö on jo olemassa!")
+      if (window.confirm(found.name + " on jo luettelossa, korvataanko vanha numero uudella?")) {
+        this.updateExisting(personObject, found)
+      }
     } else {
-      personService.create(personObject)
-        .then(newPerson => {
-          this.setState({
-            persons: this.state.persons.concat(newPerson),
-            newName: '',
-            newNumber: ''
-          })
-        })
+      this.saveNewPerson(personObject)
     }
+  }
+  updateExisting = (personObject, found) => {
+    const updatedPersons = this.state.persons.slice();
+    const index = this.state.persons.map(function (person) {
+      return person.name;
+    }).indexOf(found.name);
+    updatedPersons[index].number = this.state.newNumber
+    personService.update(found.id, personObject)
+      .then(newPerson => {
+        this.setState({
+          persons: updatedPersons,
+          newName: '',
+          newNumber: ''
+        })
+      })
+  }
+
+  saveNewPerson = (personObject) => {
+    personService.create(personObject)
+      .then(newPerson => {
+        this.setState({
+          persons: this.state.persons.concat(newPerson),
+          newName: '',
+          newNumber: ''
+        })
+      })
   }
   deletePerson = (person) => {
     if (window.confirm('Poistetaanko ' + person.name + '?')) {
