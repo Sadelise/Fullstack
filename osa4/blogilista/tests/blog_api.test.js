@@ -77,6 +77,34 @@ test('a valid blog can be added ', async () => {
   expect(title).toContain('Coderoni')
 })
 
+test('if likes is not defined, likes equals 0', async () => {
+  const newBlog = {
+    title: "No likes",
+    author: "Kille",
+    url: "www.blogsidoodles.com",
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const response = await api
+    .get('/api/blogs')
+
+  console.log("responsebody ", response.body);
+  const blogs = response.body;
+
+  const saved = blogs.find(function(blog) {
+    return blog.title === "No likes";
+  });
+  console.log("saved ", saved);
+
+  console.log("likes ", saved.likes);
+  expect(saved.likes).toBe(0)
+})
+
+
 afterAll(() => {
   server.close()
 })
