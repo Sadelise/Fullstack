@@ -1,4 +1,4 @@
-{
+﻿{
   "persons": [
     {
       "name": "Arto Hellas",
@@ -19,6 +19,5 @@
       "name": "Lea Kutvonen",
       "number": "040-123456",
       "id": 4
-    }
-  ]
+    } ]
 }

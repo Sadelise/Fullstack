@@ -53,6 +53,7 @@ class App extends React.Component {
       this.saveNewPerson(personObject)
     }
   }
+
   updateExisting = (personObject, found) => {
     const updatedPersons = this.state.persons.slice();
     const index = this.state.persons.map(function (person) {
