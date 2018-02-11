@@ -104,6 +104,25 @@ test('if likes is not defined, likes equals 0', async () => {
   expect(saved.likes).toBe(0)
 })
 
+test('blog without title and url is not added ', async () => {
+  const newBlog = {
+    author: "Liina",
+    likes: 10
+  }
+
+  const intialBlogs = await api
+    .get('/api/blogs')
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+  const response = await api
+    .get('/api/blogs')
+
+  expect(response.body.length).toBe(intialBlogs.body.length)
+})
 
 afterAll(() => {
   server.close()
