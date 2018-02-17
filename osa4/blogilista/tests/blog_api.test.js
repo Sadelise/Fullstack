@@ -4,27 +4,13 @@ const {
   server
 } = require('../index')
 const api = supertest(app)
+const helper = require('./test_helper')
 const Blog = require('../models/blog')
-
-const initialBlogs = [{
-    "title": "Coding coders code cody code",
-    "author": "Jaakko",
-    "url": "www.blogi.fi",
-    "likes": 0
-  },
-  {
-    "title": "Coding code",
-    "author": "Tiina",
-    "url": "www.blogit.fi",
-    "likes": 1
-  }
-]
 
 beforeAll(async () => {
   await Blog.remove({})
   console.log('cleared')
-
-  const blogObject = initialBlogs.map(blog => new Blog(blog))
+  const blogObject = helper.initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObject.map(blog => blog.save())
   console.log('saved')
   await Promise.all(promiseArray)
@@ -41,8 +27,8 @@ test('blogs are returned as json', async () => {
 test('all blogs are returned', async () => {
   const response = await api
     .get('/api/blogs')
-
-  expect(response.body.length).toBe(initialBlogs.length)
+  const blogsInDb = await helper.blogsInDb()
+  expect(response.body.length).toBe(blogsInDb.length)
 })
 
 test('a specific blog is within the returned blogs', async () => {
@@ -50,7 +36,6 @@ test('a specific blog is within the returned blogs', async () => {
     .get('/api/blogs')
 
   const title = response.body.map(r => r.title)
-
   expect(title).toContain('Coding coders code cody code')
 })
 
@@ -61,6 +46,7 @@ test('a valid blog can be added ', async () => {
     url: "www.blogsidoodles.com",
     likes: 0
   }
+  const blogsBefore = await helper.blogsInDb()
 
   await api
     .post('/api/blogs')
@@ -68,13 +54,10 @@ test('a valid blog can be added ', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api
-    .get('/api/blogs')
-
-  const title = response.body.map(r => r.title)
-
-  expect(response.body.length).toBe(initialBlogs.length + 1)
-  expect(title).toContain('Coderoni')
+  const blogsAfter = await helper.blogsInDb()
+  const titles = blogsAfter.map(r => r.title)
+  expect(blogsAfter.length).toBe(blogsBefore.length + 1)
+  expect(titles).toContain('Coderoni')
 })
 
 test('if likes is not defined, likes equals 0', async () => {
@@ -98,9 +81,6 @@ test('if likes is not defined, likes equals 0', async () => {
   const saved = blogs.find(function(blog) {
     return blog.title === "No likes";
   });
-  console.log("saved ", saved);
-
-  console.log("likes ", saved.likes);
   expect(saved.likes).toBe(0)
 })
 
@@ -109,19 +89,15 @@ test('blog without title and url is not added ', async () => {
     author: "Liina",
     likes: 10
   }
-
-  const intialBlogs = await api
-    .get('/api/blogs')
+  const blogsBefore = await helper.blogsInDb()
 
   await api
     .post('/api/blogs')
     .send(newBlog)
     .expect(400)
 
-  const response = await api
-    .get('/api/blogs')
-
-  expect(response.body.length).toBe(intialBlogs.body.length)
+  const blogsAfter = await helper.blogsInDb()
+  expect(blogsAfter.length).toBe(blogsBefore.length)
 })
 
 afterAll(() => {
