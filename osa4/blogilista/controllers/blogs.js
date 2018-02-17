@@ -1,3 +1,4 @@
+
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 
@@ -35,5 +36,16 @@ blogsRouter.post('/', async (request, response) => {
   response.status(201).json(result)
 })
 
+blogsRouter.delete('/:id', async (request, response) => {
+  try {
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  } catch (exception) {
+    console.log(exception)
+    response.status(400).send({
+      error: 'id does not exist'
+    })
+  }
+})
 
 module.exports = blogsRouter
