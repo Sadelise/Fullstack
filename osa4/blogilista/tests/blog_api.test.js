@@ -127,6 +127,49 @@ describe('deletion of a blog', async () => {
   })
 })
 
+
+describe('Modifying a blog', async () => {
+  let addedBlog
+
+  beforeAll(async () => {
+    addedBlog = new Blog({
+      title: "Modify me",
+      author: "Ellak",
+      url: "www.blogsmod.com",
+      likes: 14
+    })
+    await addedBlog.save()
+  })
+
+  test('PUT /api/blogs/:id blog is modified with proper statuscode', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+
+    modifiedBlog = {
+      title: "I'm modified",
+      author: "Ellak",
+      url: "www.blogsmod.com",
+      likes: addedBlog.likes + 1
+    }
+
+    await api
+      .put(`/api/blogs/${addedBlog._id}`)
+      .send(modifiedBlog)
+      .expect(200)
+
+    const blogsAfterOperation = await helper.blogsInDb()
+    const titles = blogsAfterOperation.map(r => r.title)
+
+    const found = blogsAfterOperation.find(function(blog) {
+      return blog.id == addedBlog.id;
+    });
+
+    expect(found.likes).toBe(15)
+    expect(found.title).toBe("I'm modified")
+    expect(titles).toContain(modifiedBlog.title)
+    expect(titles).not.toContain(addedBlog.title)
+    expect(blogsAfterOperation.length).toBe(blogsAtStart.length)
+  })
+})
 afterAll(() => {
   server.close()
 })
