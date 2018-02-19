@@ -27,7 +27,7 @@ const format = (blog) => {
 const formatUser = (user) => {
   return {
     id: user._id,
-    name: user.name,
+    username: user.username,
     password: user.password,
     adult: user.adult
   }
@@ -46,7 +46,8 @@ const blogsInDb = async () => {
 }
 const usersInDb = async () => {
   const users = await User.find({})
-  return users.map(format)
+  console.log("USERS ",users);
+  return users.map(formatUser)
 }
 module.exports = {
   initialBlogs,
