@@ -46,7 +46,6 @@ const blogsInDb = async () => {
 }
 const usersInDb = async () => {
   const users = await User.find({})
-  console.log("USERS ",users);
   return users.map(formatUser)
 }
 module.exports = {
