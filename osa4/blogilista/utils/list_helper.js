@@ -20,8 +20,21 @@ const favoriteBlog = (blogs) => {
   return favorite
 }
 
+const mostBlogs = (blogs) => {
+  const max = Math.max(...blogs.map(function(blog) {
+    return parseInt(blog.blogs)
+  }, 0));
+  const most = blogs.find(function(blog) {
+    return blog.blogs === max;
+  });
+
+  return most.author
+}
+
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
