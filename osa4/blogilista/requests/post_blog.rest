@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkphYWtrbyIsImlkIjoiNWE4YWRkMDQ5YWU2ZGEzMTZjYjk3MjMwIiwiaWF0IjoxNTE5MDUwMDEwfQ.oIaw3I0YYdkc0XTcjMtsqZIFDcY56daXSLXPz5H0USo
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hdHRpIiwiaWQiOiI1YThhZjQ0MTJmNjViNDE0MzA4ZmY2N2MiLCJpYXQiOjE1MTkwNTYxMDF9.LCgvzxxSPVr6_3sRWPyixJNryoI7ni5MfMem3H2og2E
 
 {
   "title": "Coding coders code cody code",
