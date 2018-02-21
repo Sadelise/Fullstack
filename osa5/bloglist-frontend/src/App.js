@@ -2,6 +2,7 @@ import React from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import styles from './App.css'
 
 class App extends React.Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class App extends React.Component {
       error: null,
       newBlog: '',
       newUrl: '',
-      newAuthor: ''
+      newAuthor: '',
+      message: null
     }
   }
 
@@ -85,6 +87,21 @@ class App extends React.Component {
           newBlog: ''
         })
       })
+      .catch(error => {
+        this.setState({
+          error: `blogia '${blogObject.title}' ei voitu lisätä`,
+        })
+        setTimeout(() => {
+          this.setState({ error: null })
+        }, 5000)
+      })
+
+    this.setState({
+      message: `a new blog '${blogObject.title}' by '${blogObject.author}' added`,
+    })
+    setTimeout(() => {
+      this.setState({ message: null })
+    }, 5000)
   }
 
   render() {
@@ -116,15 +133,23 @@ class App extends React.Component {
       </div>
     )
 
-    const Notification = ({ message }) => {
+    const Notification = ({ message, error }) => {
       if (message === null) {
         return null
       }
-      return (
-        <div className="error">
-          {message}
-        </div>
-      )
+      if (error === true) {
+        return (
+          <div className='error'>
+            {message}
+          </div>
+        )
+      } else {
+        return (
+          <div className='message'>
+            {message}
+          </div>
+        )
+      }
     }
 
     const blogForm = () => (
@@ -161,7 +186,8 @@ class App extends React.Component {
 
     return (
       <div>
-        <Notification message={this.state.error} />
+        <Notification message={this.state.error} error={true} />
+        <Notification message={this.state.message} error={false} />
 
         {this.state.user === null ?
           loginForm() :
