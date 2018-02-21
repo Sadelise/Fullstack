@@ -19,6 +19,11 @@ class App extends React.Component {
     blogService.getAll().then(blogs =>
       this.setState({ blogs })
     )
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      this.setState({ user })
+    }
   }
 
   login = async (event) => {
@@ -28,11 +33,26 @@ class App extends React.Component {
         username: this.state.username,
         password: this.state.password
       })
-
+      window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       this.setState({ username: '', password: '', user })
     } catch (exception) {
       this.setState({
         error: 'käyttäjätunnus tai salasana virheellinen',
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    }
+  }
+
+  logout = (event) => {
+    event.preventDefault()
+    try {
+      window.localStorage.removeItem('loggedBloglistUser')
+      this.setState({ user: null })
+    } catch (exception) {
+      this.setState({
+        error: 'uloskirjautuminen epäonnistui',
       })
       setTimeout(() => {
         this.setState({ error: null })
@@ -48,7 +68,7 @@ class App extends React.Component {
     const loginForm = () => (
       <div>
         <h2>Kirjaudu</h2>
-    
+
         <form onSubmit={this.login}>
           <div>
             käyttäjätunnus
@@ -72,7 +92,7 @@ class App extends React.Component {
         </form>
       </div>
     )
-    
+
     const Notification = ({ message }) => {
       if (message === null) {
         return null
@@ -83,7 +103,7 @@ class App extends React.Component {
         </div>
       )
     }
-    
+
     return (
       <div>
         <Notification message={this.state.error} />
@@ -92,6 +112,8 @@ class App extends React.Component {
           loginForm() :
           <div>
             <p>{this.state.user.name} logged in</p>
+            <button onClick={this.logout}>
+              Logout </button> 
           </div>
         }
 
