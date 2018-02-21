@@ -11,7 +11,10 @@ class App extends React.Component {
       username: '',
       password: '',
       user: null,
-      error: null
+      error: null,
+      newBlog: '',
+      newUrl: '',
+      newAuthor: ''
     }
   }
 
@@ -34,6 +37,7 @@ class App extends React.Component {
         password: this.state.password
       })
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
+      blogService.setToken(user.token)
       this.setState({ username: '', password: '', user })
     } catch (exception) {
       this.setState({
@@ -60,8 +64,27 @@ class App extends React.Component {
     }
   }
 
-  handleLoginFieldChange = (event) => {
+  handleFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
+  }
+
+  addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: this.state.newBlog,
+      author: this.state.newAuthor,
+      url: this.state.newUrl,
+      likes: 0
+    }
+
+    blogService
+      .create(blogObject)
+      .then(newBlog => {
+        this.setState({
+          blogs: this.state.blogs.concat(newBlog),
+          newBlog: ''
+        })
+      })
   }
 
   render() {
@@ -76,7 +99,7 @@ class App extends React.Component {
               type="text"
               name="username"
               value={this.state.username}
-              onChange={this.handleLoginFieldChange}
+              onChange={this.handleFieldChange}
             />
           </div>
           <div>
@@ -85,7 +108,7 @@ class App extends React.Component {
               type="password"
               name="password"
               value={this.state.password}
-              onChange={this.handleLoginFieldChange}
+              onChange={this.handleFieldChange}
             />
           </div>
           <button type="submit">kirjaudu</button>
@@ -104,6 +127,38 @@ class App extends React.Component {
       )
     }
 
+    const blogForm = () => (
+      <div>
+        <h2>Luo uusi blogi</h2>
+
+        <form onSubmit={this.addBlog}>
+          <div>
+            Title
+          <input
+              name="newBlog"
+              value={this.state.newBlog}
+              onChange={this.handleFieldChange}
+            />
+          </div>
+          <div>
+            Author
+          <input
+              name="newAuthor"
+              value={this.state.newAuthor}
+              onChange={this.handleFieldChange}
+            /></div>
+          <div>
+            Url
+          <input
+              name="newUrl"
+              value={this.state.newUrl}
+              onChange={this.handleFieldChange}
+            /></div>
+          <button type="submit">Tallenna</button>
+        </form>
+      </div>
+    )
+
     return (
       <div>
         <Notification message={this.state.error} />
@@ -113,7 +168,8 @@ class App extends React.Component {
           <div>
             <p>{this.state.user.name} logged in</p>
             <button onClick={this.logout}>
-              Logout </button> 
+              Logout </button>
+            {blogForm()}
           </div>
         }
 
