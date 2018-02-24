@@ -150,10 +150,12 @@ class App extends React.Component {
         }
 
         <h2>blogs</h2>
-        {this.state.blogs.map(blog =>
+        {this.state.blogs.sort(function (a, b) {
+          return b.likes - a.likes
+        }).map(blog =>
           <Blog key={blog._id}
             blog={blog} />
-        )
+          )
         }
       </div>
     );
