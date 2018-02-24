@@ -76,6 +76,7 @@ class App extends React.Component {
 
   addBlog = (event) => {
     event.preventDefault()
+    this.blogForm.toggleVisibility()
     const blogObject = {
       title: this.state.newBlog,
       author: this.state.newAuthor,
@@ -90,7 +91,14 @@ class App extends React.Component {
           blogs: this.state.blogs.concat(newBlog),
           newBlog: ''
         })
+        this.setState({
+          message: `a new blog '${blogObject.title}' by '${blogObject.author}' added`,
+        })
+        setTimeout(() => {
+          this.setState({ message: null })
+        }, 5000)
       })
+
       .catch(error => {
         this.setState({
           error: `blogia '${blogObject.title}' ei voitu lisätä`,
@@ -99,13 +107,6 @@ class App extends React.Component {
           this.setState({ error: null })
         }, 5000)
       })
-
-    this.setState({
-      message: `a new blog '${blogObject.title}' by '${blogObject.author}' added`,
-    })
-    setTimeout(() => {
-      this.setState({ message: null })
-    }, 5000)
   }
 
   render() {
@@ -123,7 +124,7 @@ class App extends React.Component {
     )
 
     const blogForm = () => (
-      <Togglable buttonLabel="new blog" ref={component => this.noteForm = component}>
+      <Togglable buttonLabel="new blog" ref={component => this.blogForm = component}>
         <BlogForm
           onSubmit={this.addBlog}
           newTitle={this.newTitle}
