@@ -3,6 +3,10 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import styles from './App.css'
+import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 
 class App extends React.Component {
   constructor(props) {
@@ -13,7 +17,7 @@ class App extends React.Component {
       password: '',
       user: null,
       error: null,
-      newBlog: '',
+      newTitle: '',
       newUrl: '',
       newAuthor: '',
       message: null
@@ -105,83 +109,29 @@ class App extends React.Component {
   }
 
   render() {
-    const loginForm = () => (
-      <div>
-        <h2>Kirjaudu</h2>
 
-        <form onSubmit={this.login}>
-          <div>
-            käyttäjätunnus
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleFieldChange}
-            />
-          </div>
-          <div>
-            salasana
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleFieldChange}
-            />
-          </div>
-          <button type="submit">kirjaudu</button>
-        </form>
-      </div>
+    const loginForm = () => (
+      <Togglable buttonLabel="login">
+        <LoginForm
+          visible={this.state.visible}
+          username={this.state.username}
+          password={this.state.password}
+          handleChange={this.handleFieldChange}
+          handleSubmit={this.login}
+        />
+      </Togglable>
     )
 
-    const Notification = ({ message, error }) => {
-      if (message === null) {
-        return null
-      }
-      if (error === true) {
-        return (
-          <div className='error'>
-            {message}
-          </div>
-        )
-      } else {
-        return (
-          <div className='message'>
-            {message}
-          </div>
-        )
-      }
-    }
-
     const blogForm = () => (
-      <div>
-        <h2>Luo uusi blogi</h2>
-
-        <form onSubmit={this.addBlog}>
-          <div>
-            Title
-          <input
-              name="newBlog"
-              value={this.state.newBlog}
-              onChange={this.handleFieldChange}
-            />
-          </div>
-          <div>
-            Author
-          <input
-              name="newAuthor"
-              value={this.state.newAuthor}
-              onChange={this.handleFieldChange}
-            /></div>
-          <div>
-            Url
-          <input
-              name="newUrl"
-              value={this.state.newUrl}
-              onChange={this.handleFieldChange}
-            /></div>
-          <button type="submit">Tallenna</button>
-        </form>
-      </div>
+      <Togglable buttonLabel="new blog" ref={component => this.noteForm = component}>
+        <BlogForm
+          onSubmit={this.addBlog}
+          newTitle={this.newTitle}
+          newAuthor={this.newAuthor}
+          newUrl={this.newUrl}
+          handleChange={this.handleFieldChange}
+        />
+      </Togglable>
     )
 
     return (
@@ -205,6 +155,7 @@ class App extends React.Component {
         )}
       </div>
     );
+
   }
 }
 
