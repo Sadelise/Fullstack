@@ -1,17 +1,20 @@
 import React from 'react'
-import Togglable from './Togglable'
+import blogs from '../services/blogs'
 
 class Blog extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      visible: false
+      visible: false,
+      blog: this.props.blog
     }
   }
 
   toggleVisibility = () => {
     this.setState({ visible: !this.state.visible })
   }
+
+
 
   render() {
     const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
@@ -25,25 +28,33 @@ class Blog extends React.Component {
       marginBottom: 5
     }
 
+    const likeBlog = () => {
+      const blog = this.state.blog
+      const changedBlog = { ...blog, likes: blog.likes + 1 }
+      this.setState({ blog: changedBlog })
+      blogs.update(this.props.blog.id, changedBlog)
+    }
+
     return (
       <div style={blogStyle}>
         <div style={hideWhenVisible} onClick={this.toggleVisibility}>
           <div>
-            {this.props.blog.title} {this.props.blog.author}
+            {this.state.blog.title} {this.state.blog.author}
           </div>
         </div>
-        <div style={showWhenVisible} onClick={this.toggleVisibility}>
+        <div style={showWhenVisible} >
           <div>
-            {this.props.blog.title} {this.props.blog.author}
+            <div onClick={this.toggleVisibility}>
+              {this.state.blog.title} {this.state.blog.author}
+            </div>
             <br></br>
-            {this.props.blog.url}
+            {this.state.blog.url}
             <br></br>
-            {this.props.blog.likes} likes
-            <button>like</button>
-
+            {this.state.blog.likes} likes
+            <button onClick={() => likeBlog()}>like</button>
             <br></br>
-            added by {this.props.blog.user != null ?
-              this.props.blog.user.name : 'unknown'
+            added by {this.state.blog.user != null ?
+              this.state.blog.user.name : 'unknown'
             }
           </div>
         </div>

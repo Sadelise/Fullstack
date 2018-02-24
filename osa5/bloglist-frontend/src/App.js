@@ -92,13 +92,12 @@ class App extends React.Component {
           newBlog: ''
         })
         this.setState({
-          message: `a new blog '${blogObject.title}' by '${blogObject.author}' added`,
+          message: `a new blog '${this.state.newTitle}' by '${this.state.newAuthor}' added`,
         })
         setTimeout(() => {
           this.setState({ message: null })
         }, 5000)
       })
-
       .catch(error => {
         this.setState({
           error: `blogia '${blogObject.title}' ei voitu lisätä`,
