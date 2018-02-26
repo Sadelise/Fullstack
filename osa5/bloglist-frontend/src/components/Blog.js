@@ -1,5 +1,6 @@
 import React from 'react'
 import blogs from '../services/blogs'
+import App from '../App.js'
 
 class Blog extends React.Component {
   constructor(props) {
@@ -13,8 +14,6 @@ class Blog extends React.Component {
   toggleVisibility = () => {
     this.setState({ visible: !this.state.visible })
   }
-
-
 
   render() {
     const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
@@ -32,7 +31,11 @@ class Blog extends React.Component {
       const blog = this.state.blog
       const changedBlog = { ...blog, likes: blog.likes + 1 }
       this.setState({ blog: changedBlog })
-      blogs.update(this.props.blog.id, changedBlog)
+      blogs.update(this.state.blog.id, changedBlog)
+    }
+
+    const deleteBlog = () => {
+          this.props.deleteBlog(this.state.blog)
     }
 
     return (
@@ -56,6 +59,8 @@ class Blog extends React.Component {
             added by {this.state.blog.user != null ?
               this.state.blog.user.name : 'unknown'
             }
+            <br></br>
+            <button onClick={() => deleteBlog()}>delete</button>
           </div>
         </div>
       </div>

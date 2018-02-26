@@ -25,4 +25,15 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, setToken }
+const deleteBlog = (id) => {
+  const config = {
+    headers: { 'Authorization': token }
+  }
+  console.log("Token with call ", token);
+  console.log("Token from storage", window.localStorage.getItem("loggedBloglistUser"));
+  const request = axios.delete(`${baseUrl}/${id}`, config)
+  console.log("request ", request);
+  return request.then(response => response.data)
+}
+
+export default { getAll, create, update, setToken, deleteBlog }

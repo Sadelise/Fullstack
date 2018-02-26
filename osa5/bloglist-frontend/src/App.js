@@ -7,6 +7,7 @@ import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import blogs from './services/blogs'
 
 class App extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    console.log("Did mount");
     blogService.getAll().then(blogs =>
       this.setState({ blogs })
     )
@@ -32,6 +34,7 @@ class App extends React.Component {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       this.setState({ user })
+      blogService.setToken(user.token)
     }
   }
 
@@ -59,6 +62,7 @@ class App extends React.Component {
     event.preventDefault()
     try {
       window.localStorage.removeItem('loggedBloglistUser')
+      blogService.setToken(null)
       this.setState({ user: null })
     } catch (exception) {
       this.setState({
@@ -108,8 +112,60 @@ class App extends React.Component {
       })
   }
 
-  render() {
+  deleteBlog = (blog) => {
+    console.log("blog user ", blog.user);
+    console.log("signed user ", this.state.user);
+    if (this.state.user !== null) {
+      if (blog.user === null || blog.user === undefined) {
+        this.doDelete(blog)
+      } else if (this.state.user.username.toString() === blog.user.username.toString()) {
+        console.log("usernames");
+        console.log(this.state.user.username);
+        console.log(blog.user.username);
+        this.doDelete(blog)
+      } else {
+        this.noRightsToDelete(blog)
+      }
+    } else {
+      this.setState({
+        error: `Vain kirjautuneet käyttäjät voivat poistaa blogeja.`,
+      })
+      setTimeout(() => {
+        this.setState({ error: null })
+      }, 5000)
+    }
+  }
+  doDelete = (blog) => {
+    const updatedBlogs = this.state.blogs.filter(b => {
+      return b !== blog
+    })
+    if (window.confirm(`delete '${blog.title}' by ${blog.author}?`)) {
+      blogs.deleteBlog(blog.id).then(
+        this.setState({ blogs: updatedBlogs })
+      ).catch(error => {
+        this.setState({
+          error: `blogia '${blog.title}' ei voitu poistaa`,
+        })
+        setTimeout(() => {
+          this.setState({ error: null })
+        }, 5000)
+      })
+    } else {
+      this.noRightsToDelete(blog)
+    }
+  }
 
+  noRightsToDelete = (blog) => {
+    console.log(blog);
+    this.setState({
+      error: `blogia '${blog.title}' ei voi poistaa, sinulla ei ole oikeuksia`,
+    })
+    setTimeout(() => {
+      this.setState({ error: null })
+    }, 5000)
+  }
+
+  render() {
     const loginForm = () => (
       <Togglable buttonLabel="login">
         <LoginForm
@@ -134,6 +190,7 @@ class App extends React.Component {
       </Togglable>
     )
 
+
     return (
       <div>
         <Notification message={this.state.error} error={true} />
@@ -149,13 +206,15 @@ class App extends React.Component {
           </div>
         }
 
-        <h2>blogs</h2>
-        {this.state.blogs.sort(function (a, b) {
-          return b.likes - a.likes
-        }).map(blog =>
-          <Blog key={blog._id}
-            blog={blog} />
-          )
+        <h2> blogs</h2>
+        {
+          this.state.blogs.sort(function (a, b) {
+            return b.likes - a.likes
+          }).map(blog =>
+            <Blog key={blog._id}
+              blog={blog}
+              deleteBlog={this.deleteBlog} />
+            )
         }
       </div>
     );
