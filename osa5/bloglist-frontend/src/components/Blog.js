@@ -23,7 +23,7 @@ class Blog extends React.Component {
       deleteVisibility = false
     } else if (this.state.blog.user === null || this.state.blog.user === undefined) {
       deleteVisibility = true
-    } else if (this.state.blog.user.username.toString() === this.props.user.username.toString()) {
+    } else if (this.state.blog.user.username === this.props.user.username) {
       deleteVisibility = true
     }
 

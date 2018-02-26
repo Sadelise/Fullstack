@@ -27,14 +27,15 @@ class App extends React.Component {
 
   componentDidMount() {
     console.log("Did mount");
-    blogService.getAll().then(blogs =>
-      this.setState({ blogs })
-    )
+
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       this.setState({ user })
       blogService.setToken(user.token)
+      blogService.getAll().then(blogs =>
+        this.setState({ blogs })
+      )
     }
   }
 
@@ -48,6 +49,9 @@ class App extends React.Component {
       window.localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
       blogService.setToken(user.token)
       this.setState({ username: '', password: '', user })
+      blogService.getAll().then(blogs =>
+        this.setState({ blogs })
+      )
     } catch (exception) {
       this.setState({
         error: 'käyttäjätunnus tai salasana virheellinen',
@@ -64,6 +68,7 @@ class App extends React.Component {
       window.localStorage.removeItem('loggedBloglistUser')
       blogService.setToken(null)
       this.setState({ user: null })
+      this.setState({ blogs: [] })
     } catch (exception) {
       this.setState({
         error: 'uloskirjautuminen epäonnistui',
@@ -185,13 +190,6 @@ class App extends React.Component {
       </Togglable>
     )
 
-    var blogsVisible = false
-    if (this.state.user !== null && this.state.user !== undefined) {
-      blogsVisible = true
-    }
-
-    const blogsVisibility = { display: blogsVisible ? '' : 'none' }
-
     return (
       <div>
         <Notification message={this.state.error} error={true} />
@@ -208,18 +206,16 @@ class App extends React.Component {
         }
 
         <h2> blogs</h2>
-        <div style={blogsVisibility}>
-          {
-            this.state.blogs.sort(function (a, b) {
-              return b.likes - a.likes
-            }).map(blog =>
-              <Blog key={blog.id}
-                blog={blog}
-                deleteBlog={this.deleteBlog}
-                user={this.state.user} />
-              )
-          }
-        </div>
+        {
+          this.state.blogs.sort(function (a, b) {
+            return b.likes - a.likes
+          }).map(blog =>
+            <Blog key={blog.id}
+              blog={blog}
+              deleteBlog={this.deleteBlog}
+              user={this.state.user} />
+            )
+        }
       </div>
     );
 
