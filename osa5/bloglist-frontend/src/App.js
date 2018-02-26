@@ -185,6 +185,12 @@ class App extends React.Component {
       </Togglable>
     )
 
+    var blogsVisible = false
+    if (this.state.user !== null && this.state.user !== undefined) {
+      blogsVisible = true
+    }
+
+    const blogsVisibility = { display: blogsVisible ? '' : 'none' }
 
     return (
       <div>
@@ -202,16 +208,18 @@ class App extends React.Component {
         }
 
         <h2> blogs</h2>
-        {
-          this.state.blogs.sort(function (a, b) {
-            return b.likes - a.likes
-          }).map(blog =>
-            <Blog key={blog.id}
-              blog={blog}
-              deleteBlog={this.deleteBlog}
-              user={this.state.user} />
-            )
-        }
+        <div style={blogsVisibility}>
+          {
+            this.state.blogs.sort(function (a, b) {
+              return b.likes - a.likes
+            }).map(blog =>
+              <Blog key={blog.id}
+                blog={blog}
+                deleteBlog={this.deleteBlog}
+                user={this.state.user} />
+              )
+          }
+        </div>
       </div>
     );
 
