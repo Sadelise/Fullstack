@@ -1,6 +1,5 @@
 import React from 'react'
 import blogs from '../services/blogs'
-import App from '../App.js'
 
 class Blog extends React.Component {
   constructor(props) {
