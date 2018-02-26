@@ -113,15 +113,10 @@ class App extends React.Component {
   }
 
   deleteBlog = (blog) => {
-    console.log("blog user ", blog.user);
-    console.log("signed user ", this.state.user);
     if (this.state.user !== null) {
       if (blog.user === null || blog.user === undefined) {
         this.doDelete(blog)
       } else if (this.state.user.username.toString() === blog.user.username.toString()) {
-        console.log("usernames");
-        console.log(this.state.user.username);
-        console.log(blog.user.username);
         this.doDelete(blog)
       } else {
         this.noRightsToDelete(blog)
@@ -213,7 +208,8 @@ class App extends React.Component {
           }).map(blog =>
             <Blog key={blog._id}
               blog={blog}
-              deleteBlog={this.deleteBlog} />
+              deleteBlog={this.deleteBlog}
+              user={this.state.user} />
             )
         }
       </div>

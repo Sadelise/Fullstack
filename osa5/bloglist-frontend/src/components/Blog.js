@@ -19,6 +19,17 @@ class Blog extends React.Component {
     const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
     const showWhenVisible = { display: this.state.visible ? '' : 'none' }
 
+    var deleteVisibility = false
+    if (this.props.user === null || this.props.user === undefined) {
+      deleteVisibility = false
+    } else if (this.state.blog.user === null || this.state.blog.user === undefined) {
+      deleteVisibility = true
+    } else if (this.state.blog.user.username.toString() === this.props.user.username.toString()) {
+      deleteVisibility = true
+    }
+
+    const hideDeleteVisibility = { display: deleteVisibility ? '' : 'none' }
+
     const blogStyle = {
       paddingTop: 10,
       paddingLeft: 2,
@@ -35,11 +46,11 @@ class Blog extends React.Component {
     }
 
     const deleteBlog = () => {
-          this.props.deleteBlog(this.state.blog)
+      this.props.deleteBlog(this.state.blog)
     }
 
     return (
-      <div style={blogStyle}>
+      <div style={blogStyle} >
         <div style={hideWhenVisible} onClick={this.toggleVisibility}>
           <div>
             {this.state.blog.title} {this.state.blog.author}
@@ -59,8 +70,9 @@ class Blog extends React.Component {
             added by {this.state.blog.user != null ?
               this.state.blog.user.name : 'unknown'
             }
-            <br></br>
-            <button onClick={() => deleteBlog()}>delete</button>
+            <div style={hideDeleteVisibility}>
+              <button onClick={() => deleteBlog()}>delete</button>
+            </div>
           </div>
         </div>
       </div>
