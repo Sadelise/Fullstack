@@ -51,24 +51,25 @@ class Blog extends React.Component {
     return (
       <div style={blogStyle} >
         <div style={hideWhenVisible} onClick={this.toggleVisibility}>
-          <div>
+          <div className="blog">
             {this.state.blog.title} {this.state.blog.author}
           </div>
         </div>
         <div style={showWhenVisible} >
           <div>
-            <div onClick={this.toggleVisibility}>
+            <div onClick={this.toggleVisibility} className="details">
               {this.state.blog.title} {this.state.blog.author}
-            </div>
-            <br></br>
-            {this.state.blog.url}
-            <br></br>
-            {this.state.blog.likes} likes
+
+              <br></br>
+              {this.state.blog.url}
+              <br></br>
+              {this.state.blog.likes} likes
             <button onClick={() => likeBlog()}>like</button>
-            <br></br>
-            added by {this.state.blog.user != null ?
-              this.state.blog.user.name : 'unknown'
-            }
+              <br></br>
+              added by {this.state.blog.user != null ?
+                this.state.blog.user.name : 'unknown'
+              }
+            </div>
             <div style={hideDeleteVisibility}>
               <button onClick={() => deleteBlog()}>delete</button>
             </div>
