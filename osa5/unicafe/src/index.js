@@ -1,11 +1,17 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
-import counterReducer from 'reducer'
+import counterReducer from './reducer'
+
+const store = createStore(counterReducer)
+const Nollaa = () => () => {
+    store.dispatch({ type: 'ZERO' })
+}
 
 const Statistiikka = () => {
-    const palautteita = 0
+    const state = store.getState()
 
+    const palautteita = state.good + state.ok + state.bad
     if (palautteita === 0) {
         return (
             <div>
@@ -22,38 +28,46 @@ const Statistiikka = () => {
                 <tbody>
                     <tr>
                         <td>hyvä</td>
-                        <td></td>
+                        <td>{state.good}</td>
                     </tr>
                     <tr>
                         <td>neutraali</td>
-                        <td></td>
+                        <td>{state.ok}</td>
                     </tr>
                     <tr>
                         <td>huono</td>
-                        <td></td>
+                        <td>{state.bad}</td>
                     </tr>
                     <tr>
                         <td>keskiarvo</td>
-                        <td></td>
+                        <td>{Keskiarvo()}</td>
                     </tr>
                     <tr>
                         <td>positiivisia</td>
-                        <td></td>
+                        <td>{Positiivisia()}</td>
                     </tr>
                 </tbody>
             </table>
 
-            <button>nollaa tilasto</button>
+            <button onClick={Nollaa()}>nollaa tilasto</button>
         </div >
     )
 }
 
-const store = createStore(counterReducer)
+function Keskiarvo() {
+    const state = store.getState()
+    return ((state.good - state.bad) / (state.good + state.ok + state.bad))
+}
+function Positiivisia() {
+    const state = store.getState()
+    return (
+        <div>{state.good / (state.good + state.ok + state.bad) * 100} %</div>
+    )
+}
 
 class App extends React.Component {
-
     klik = (nappi) => () => {
-        
+        store.dispatch({ type: nappi })
     }
 
     render() {
@@ -69,7 +83,9 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const renderApp = () => {
+    ReactDOM.render(<App />, document.getElementById('root'))
+}
 
 renderApp()
 store.subscribe(renderApp)
