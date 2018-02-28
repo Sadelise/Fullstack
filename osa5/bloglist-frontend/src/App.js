@@ -7,7 +7,6 @@ import Togglable from './components/Togglable'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import blogs from './services/blogs'
 
 class App extends React.Component {
   constructor(props) {
@@ -140,7 +139,7 @@ class App extends React.Component {
       return b !== blog
     })
     if (window.confirm(`delete '${blog.title}' by ${blog.author}?`)) {
-      blogs.deleteBlog(blog.id).then(
+      blogService.deleteBlog(blog.id).then(
         this.setState({ blogs: updatedBlogs })
       ).catch(error => {
         this.setState({

@@ -19,3 +19,23 @@ describe('<App />', () => {
         console.log(blogComponents.debug())
     })
 })
+
+describe('<App /> signed in user', () => {
+    let app
+
+    const user = {
+        username: 'Jaaks',
+        token: 'passu',
+        name: 'Jaakko'
+    }
+
+    beforeAll(() => {
+        localStorage.setItem('loggedBloglistUser', JSON.stringify(user))
+        app = mount(<App />)
+    })
+    it('blogs render when user is signed in', () => {
+        app.update()
+        const blogComponents = app.find(Blog)
+        expect(blogComponents.length).toEqual(blogService.blogs.length)
+    })
+})

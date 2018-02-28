@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Blog from './Blog'
 
-describe.only('<Blog />', () => {
+describe('<Blog />', () => {
     it('only blog name and author are shown first', () => {
         const blog = {
             title: 'Blogi',

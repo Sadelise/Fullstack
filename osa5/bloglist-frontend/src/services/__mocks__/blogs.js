@@ -40,4 +40,8 @@ const getAll = () => {
     return Promise.resolve(blogs)
 }
 
-export default { getAll, blogs }
+const setToken = (newToken) => {
+    // do nothing
+}
+
+export default { getAll, blogs, setToken }
