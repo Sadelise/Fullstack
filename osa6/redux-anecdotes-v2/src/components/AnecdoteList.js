@@ -13,10 +13,6 @@ class AnecdoteList extends React.Component {
 
   anecdotesToShow = () => {
     const { anecdotes, filter } = this.props.store.getState()
-
-    if (filter.filter === '') {
-      return anecdotes
-    }
     return anecdotes.filter(function(a){
       return a.content.toLowerCase().indexOf(filter.filter) !== -1;
     })
