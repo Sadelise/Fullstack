@@ -5,11 +5,18 @@ import AnecdoteList from './components/AnecdoteList'
 import PropTypes from 'prop-types'
 
 class App extends React.Component {
+  componentDidMount() {
+    const { store } = this.context
+    this.unsubscribe = store.subscribe(() =>
+      this.forceUpdate()
+    )
+  }
 
   render() {
     const { store } = this.context
 
-    const anecdotes = this.context.store.getState().anecdotes
+
+    // const anecdotes = this.context.store.getState().anecdotes
     return (
       <div>
         <h1>Programming anecdotes</h1>

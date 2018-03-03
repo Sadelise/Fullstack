@@ -1,28 +1,18 @@
-
-// const getId = (
-// const asObject = (anecdote) => {
-//   return {
-//     content: anecdote,
-//     id: getId(),
-//     votes: 0
-//   }
-// }
-
 const initialState = {
   message: 'Tervetuloa'
 }
 
 const notificationReducer = (store = initialState, action) => {
   if (action.type === 'NOTIFICATION') {
-    return [...store, {
+    return {
       message: action.content,
-    }]
+    }
   }
   if (action.type === 'ZERO') {
 
-    return [...store, {
+    return {
       message: '',
-    }]
+    }
   }
 
   return store
@@ -35,7 +25,7 @@ export const setNotification = (content) => {
   }
 }
 
-export const noMessage = () => {
+export const zeroNotification = () => {
   return {
     type: 'ZERO'
   }

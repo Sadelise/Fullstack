@@ -1,11 +1,16 @@
 import React from 'react'
 import { anecdoteCreation } from './../reducers/anecdoteReducer'
+import { setNotification, zeroNotification } from './../reducers/notificationReducer'
 
 class AnecdoteForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault()
     const content = e.target.anecdote.value
     this.props.store.dispatch(anecdoteCreation(content))
+    this.props.store.dispatch(setNotification(`You created '${content}'`)) 
+    setTimeout(() => {
+      this.props.store.dispatch(zeroNotification())
+    }, 5000)
 
     e.target.anecdote.value = ''
   }
