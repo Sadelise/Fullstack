@@ -9,12 +9,10 @@ const notificationReducer = (store = initialState, action) => {
     }
   }
   if (action.type === 'ZERO') {
-
     return {
       message: '',
     }
   }
-
   return store
 }
 
