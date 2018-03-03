@@ -11,11 +11,19 @@ class AnecdoteList extends React.Component {
     }, 5000)
   }
 
+  anecdotesToShow = () => {
+    const { anecdotes, filter } = this.props.store.getState()
+
+    if (filter.filter === '') {
+      return anecdotes
+    }
+    return anecdotes.filter(function(a){
+      return a.content.toLowerCase().indexOf(filter.filter) !== -1;
+    })
+  }
+
   render() {
-    const anecdotes = this
-      .props
-      .store
-      .getState().anecdotes
+    const anecdotes = this.anecdotesToShow()
 
     return (
       <div>
