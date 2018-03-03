@@ -3,6 +3,7 @@ import { anecdoteVoting } from './../reducers/anecdoteReducer'
 import { setNotification, zeroNotification } from './../reducers/notificationReducer'
 import { connect } from 'react-redux'
 import Filter from './Filter'
+import anecdoteService from '../services/anecdotes'
 
 class AnecdoteList extends React.Component {
   render() {
@@ -26,7 +27,9 @@ class AnecdoteList extends React.Component {
       </div>
     )}
 
- handleVote = (anecdote) => {
+ handleVote = async (anecdote) => {
+   const updatedAnecdote = { ...anecdote, votes: anecdote.votes+1 }
+   await anecdoteService.updateAnecdote(updatedAnecdote)
    this.props.anecdoteVoting(anecdote.id)
    this.props.setNotification(`You voted '${anecdote.content}'`)
    setTimeout(() => {
