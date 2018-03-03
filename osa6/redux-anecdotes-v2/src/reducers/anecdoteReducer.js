@@ -19,7 +19,7 @@ const reducer = (store = initialState, action) => {
 
     return [...old, { ...voted, votes: voted.votes + 1 }]
   } else if (action.type === 'CREATE') {
-    return [...store, { content: action.content, id: getId(), votes: 0 }]
+    return [...store, { content: action.data.content, id: action.data.id, votes: 0 }]
   } else if (action.type === 'INIT') {
     return action.data
   }
@@ -34,10 +34,10 @@ export const anecdoteInitialization = (data) => {
   }
 }
 
-export const anecdoteCreation = (content) => {
+export const anecdoteCreation = (data) => {
   return {
     type: 'CREATE',
-    content
+    data
   }
 }
 
